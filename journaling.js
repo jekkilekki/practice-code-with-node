@@ -1,12 +1,11 @@
 /**
  * journaling.js
  * 
- * Stdout.prompts.js (original)
- * 
  * This file works with stdout, stdin, and filestreams.
+ * It asks the user to reflect on their day's activities,
+ * then stores the answers in a file for later reference.
  */
 const fs = require('fs');
-const path = require('path');
 
 let date = new Date();
 let year = date.getFullYear();
@@ -39,12 +38,17 @@ journal();
 
 process.stdin.once('data', (data) => {
     let filename = `./journal/${today}.md`;
-    if (fs.existsSync(filename)) {
-        // Delete and start fresh
-        fs.unlinkSync(filename);
-    }
     answerStream = fs.createWriteStream(filename);
-    answerStream.write(`# Journal entry for ${today}\n`);
+
+    if (fs.existsSync(filename)) {
+        // Delete and start fresh (OLD VERSION)
+        // fs.unlinkSync(filename);
+
+        // Now, it just decides which entry to begin with.
+        answerStream.write(`\n---\n## Good afternoon!\n\n`)
+    } else {
+        answerStream.write(`# Journal entry for ${today}\n\n`);
+    }
 });
 
 // Record answers
