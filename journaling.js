@@ -4,8 +4,22 @@
  * This file works with stdout, stdin, and filestreams.
  * It asks the user to reflect on their day's activities,
  * then stores the answers in a file for later reference.
+ * 
+ * @TODO: This script now doesn't 'readline' - I had neglected
+ * to include that portion of the code. NOW, considering this 
+ * file, morningPages, AND interview are all performing the 
+ * SAME function (with different questions), it's time to break
+ * these things down into our './lib' folder and different modules
+ * that then merely call up different sets of questions
+ * DEPENDING ON THE TIME OF DAY (morning, afternoon, etc).
  */
 const fs = require('fs');
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
 let date = new Date();
 let year = date.getFullYear();
@@ -38,7 +52,7 @@ journal();
 
 process.stdin.once('data', (data) => {
     let filename = `./journal/${today}.md`;
-    answerStream = fs.createWriteStream(filename);
+    answerStream = fs.createWriteStream(filename, {flags: 'a'}); // 'a' is for append
 
     if (fs.existsSync(filename)) {
         // Delete and start fresh (OLD VERSION)
